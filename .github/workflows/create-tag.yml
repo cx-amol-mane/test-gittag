@@ -64,23 +64,36 @@ jobs:
       - name: Get the new tag
         id: get_new_tag_api
         run: |
+          # Fetch the latest tags from remote to sync with API-created tag
+          git fetch --tags
           TAG_NAME=$(git describe --tags --abbrev=0)
           echo "Extracted Tag Name: $TAG_NAME"
 
-      - name: Get tag via GitHub API
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tag="${{ github.event.inputs.tag_name }}"
+    #   - name: Get tag via GitHub API
+    #     env:
+    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     run: |
+    #       # Option 1: Use input (current method)
+    #       tag="${{ github.event.inputs.tag_name }}"
           
-          echo "Fetching tag information via GitHub API..."
-          tag_info=$(gh api /repos/${{ github.repository }}/git/refs/tags/$tag)
-          echo "Tag information: $tag_info"
+    #       # Option 2: Get the latest tag from git
+    #       # latest_tag=$(git describe --tags --abbrev=0)
           
-          # Get all releases to check for drafts 
-          releases=$(gh api /repos/${{ github.repository }}/releases)
-          echo "Repository releases fetched"
+    #       # Option 3: Get the tag that was just created (from previous step)
+    #       # tag=$(git tag --sort=-version:refname | head -n1)
           
-          # Print extracted tag name
-          echo "Extracted Tag Name: $tag"
-    
+    #       # Option 4: Use environment variable if set in previous step
+    #       # tag="$NEXT_VERSION"
+          
+    #       echo "Using tag: $tag"
+    #       echo "Fetching tag information via GitHub API..."
+    #       tag_info=$(gh api /repos/${{ github.repository }}/git/refs/tags/$tag)
+    #       echo "Tag information: $tag_info"
+          
+    #       # Get all releases to check for drafts 
+    #       releases=$(gh api /repos/${{ github.repository }}/releases)
+    #       echo "Repository releases fetched"
+          
+    #       # Print extracted tag name
+    #       echo "Extracted Tag Name: $tag"
+          
