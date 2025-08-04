@@ -1,0 +1,32 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name'
+        required: true
+        type: string
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create and push tag
+        env:
+          TAG_NAME: ${{ github.event.inputs.tag_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+
+      - name: Get the new tag
+        id: get_new_tag
+        run: |
+          TAG_NAME=$(git describe --tags --abbrev=0)
+          echo "Extracted Tag Name: $TAG_NAME"
