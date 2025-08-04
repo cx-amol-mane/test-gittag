@@ -77,6 +77,10 @@ jobs:
           tag_info=$(gh api /repos/${{ github.repository }}/git/refs/tags/$tag)
           echo "Tag information: $tag_info"
           
-          # Get all releases to check for drafts (like in your example)
+          # Get all releases to check for drafts 
           releases=$(gh api /repos/${{ github.repository }}/releases)
           echo "Repository releases fetched"
+          
+          # Print extracted tag name
+          echo "Extracted Tag Name: $tag"
+    
