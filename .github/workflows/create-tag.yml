@@ -67,16 +67,16 @@ jobs:
           TAG_NAME=$(git describe --tags --abbrev=0)
           echo "Extracted Tag Name: $TAG_NAME"
 
-    #   - name: Get tag via GitHub API
-    #     env:
-    #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #     run: |
-    #       tag="${{ github.event.inputs.tag_name }}"
+      - name: Get tag via GitHub API
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ github.event.inputs.tag_name }}"
           
-    #       echo "Fetching tag information via GitHub API..."
-    #       tag_info=$(gh api /repos/${{ github.repository }}/git/refs/tags/$tag)
-    #       echo "Tag information: $tag_info"
+          echo "Fetching tag information via GitHub API..."
+          tag_info=$(gh api /repos/${{ github.repository }}/git/refs/tags/$tag)
+          echo "Tag information: $tag_info"
           
-    #       # Get all releases to check for drafts (like in your example)
-    #       releases=$(gh api /repos/${{ github.repository }}/releases)
-    #       echo "Repository releases fetched"
+          # Get all releases to check for drafts (like in your example)
+          releases=$(gh api /repos/${{ github.repository }}/releases)
+          echo "Repository releases fetched"
